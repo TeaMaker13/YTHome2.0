@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Mój YouTube",
+  "version": "0.1.0",
+  "permissions": ["storage"],
+  "host_permissions": ["https://www.googleapis.com/*"],
+  "description": "TeaMaker here",
+  "action": {
+    "default_title": "He he"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mój YouTube</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header>
+    <h1>Mój YouTube</h1>
+     <button id="open-settings" type="button">Ustawienia</button> 
+  </header>
+
+  <main>
+   <section class="panel">
+  <h2>Wyszukaj filmy</h2>
+
+  <form id="search-form">
+    <label for="search-query">Czego szukasz?</label>
+
+    <input
+      id="search-query"
+      type="search"
+      placeholder="Np. nauka gry na gitarze"
+      required
+    >
+
+    <button id="search-button" type="submit">Szukaj</button>
+  </form>
+
+  <p id="search-status" role="status"></p>
+
+  <div id="search-results"></div>
+</section>Mam
+  </main>
+  <dialog id="settings-dialog" aria-labelledby="settings-title">
+  <h2 id="settings-title">Ustawienia</h2>
+
+  <p>Wpisz swój klucz YouTube Data API v3.</p>
+
+  <label for="api-key">Klucz API</label>
+  <input
+    id="api-key"
+    type="password"
+    placeholder="Wklej swój klucz API"
+    autocomplete="off"
+    spellcheck="false"
+  >
+
+  <button id="save-settings" type="button">Zapisz</button>
+  <button id="close-settings" type="button">Zamknij</button>
+</dialog>
+<script src="index.js"></script>
+</body>
+</html>
