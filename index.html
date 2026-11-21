@@ -34,9 +34,34 @@
   <p id="search-status" role="status"></p>
 
   <div id="search-results"></div>
-</section>Mam
+</section>
+<section class="panel subscriptions-panel">
+  <h2>Najnowsze z obserwowanych kanałów</h2>
+
+  <p id="subscriptions-status" role="status">
+    Tutaj pojawią się filmy z kanałów zapisanych w ustawieniach.
+  </p>
+
+  <div id="subscriptions-results"></div>
+</section>
   </main>
   <dialog id="settings-dialog" aria-labelledby="settings-title">
+    <label for="subscribed-channels">
+  Obserwowane kanały
+</label>
+
+<p id="channels-help">
+  Wpisz po jednym kanale w każdym wierszu.
+  Możesz podać nazwę z @ albo adres z taką nazwą.
+</p>
+
+<textarea
+  id="subscribed-channels"
+  rows="6"
+  placeholder="@NazwaKanalu&#10;https://www.youtube.com/@InnyKanal"
+  aria-describedby="channels-help"
+  spellcheck="false"
+></textarea>
   <h2 id="settings-title">Ustawienia</h2>
 
   <p>Wpisz swój klucz YouTube Data API v3.</p>
@@ -54,5 +79,6 @@
   <button id="close-settings" type="button">Zamknij</button>
 </dialog>
 <script src="index.js"></script>
+<script src="subscriptions.js"></script>
 </body>
 </html>

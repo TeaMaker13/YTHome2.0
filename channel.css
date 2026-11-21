@@ -1,0 +1,91 @@
+#channel-filter {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  background: #101014;
+  color: #eeeef2;
+  border: 1px solid #555568;
+  border-radius: 8px;
+  font: inherit;
+}
+
+#load-all-videos {
+  padding: 10px 20px;
+  background: #7357e8;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font: inherit;
+  cursor: pointer;
+}
+
+#load-all-videos:hover {
+  background: #886cf5;
+}
+
+#load-all-videos:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+#channel-filter:focus-visible,
+#load-all-videos:focus-visible {
+  outline: 2px solid #b6a5ff;
+  outline-offset: 3px;
+}
+
+#channel-results {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+/* Karta filmu w pionowej liście */
+.channel-video {
+  display: flex;
+  gap: 20px;
+  padding: 16px;
+  background: #101014;
+  border: 1px solid #303038;
+  border-radius: 12px;
+}
+
+.channel-video img {
+  width: 240px;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  align-self: flex-start;
+  border-radius: 8px;
+}
+
+.channel-video h2 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  overflow-wrap: anywhere;
+}
+
+.channel-video a {
+  color: #eeeef2;
+  text-decoration: none;
+}
+
+.channel-video a:hover {
+  color: #b6a5ff;
+}
+
+.channel-video p {
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .channel-video {
+    flex-direction: column;
+  }
+
+  .channel-video img {
+    width: 100%;
+  }
+}

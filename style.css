@@ -146,3 +146,178 @@ p {
   outline: 2px solid white;
   outline-offset: 3px;
 }
+/* Poziomy rząd wyników */
+#search-results {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 12px 0 20px;
+}
+
+/* Pojedyncza karta filmu */
+.video-card {
+  flex: 0 0 280px;
+  overflow: hidden;
+  background: #101014;
+  border: 1px solid #303038;
+  border-radius: 12px;
+}
+
+/* Miniatura */
+.video-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+/* Tytuł */
+.video-card h3 {
+  margin: 14px 16px 8px;
+  font-size: 16px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.video-card a {
+  color: #eeeef2;
+  text-decoration: none;
+}
+
+.video-card a:hover {
+  color: #b6a5ff;
+}
+
+/* Nazwa kanału */
+.video-card p {
+  margin: 0 16px 16px;
+  font-size: 14px;
+}
+
+/* Wygląd poziomego suwaka */
+#search-results::-webkit-scrollbar {
+  height: 10px;
+}
+
+#search-results::-webkit-scrollbar-track {
+  background: #101014;
+  border-radius: 10px;
+}
+
+#search-results::-webkit-scrollbar-thumb {
+  background: #7357e8;
+  border-radius: 10px;
+}
+
+#search-results::-webkit-scrollbar-thumb:hover {
+  background: #886cf5;
+}
+
+#subscribed-channels {
+  display: block;
+  width: 100%;
+  min-height: 140px;
+  margin-bottom: 20px;
+  padding: 12px;
+  resize: vertical;
+  background: #101014;
+  color: #eeeef2;
+  border: 1px solid #555568;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+#subscribed-channels:focus-visible {
+  outline: 2px solid #886cf5;
+  outline-offset: 2px;
+}
+
+#channels-help {
+  font-size: 13px;
+}
+
+.subscriptions-panel {
+  margin-top: 28px;
+}
+
+#subscriptions-results {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 12px 0 20px;
+}
+
+#subscriptions-results::-webkit-scrollbar {
+  height: 10px;
+}
+
+#subscriptions-results::-webkit-scrollbar-track {
+  background: #101014;
+  border-radius: 10px;
+}
+
+#subscriptions-results::-webkit-scrollbar-thumb {
+  background: #7357e8;
+  border-radius: 10px;
+}
+
+#subscriptions-results::-webkit-scrollbar-thumb:hover {
+  background: #886cf5;
+}
+/* Kanały ustawione jeden pod drugim */
+#subscriptions-results {
+  display: block;
+  padding: 0;
+  overflow: visible;
+}
+
+.channel-section {
+  margin-top: 24px;
+  min-width: 0;
+}
+
+.channel-section h3 {
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+
+/* Osobny przewijany rząd dla każdego kanału */
+.channel-videos {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 0 0 16px;
+}
+
+.channel-videos::-webkit-scrollbar {
+  height: 10px;
+}
+
+.channel-videos::-webkit-scrollbar-track {
+  background: #101014;
+  border-radius: 10px;
+}
+
+.channel-videos::-webkit-scrollbar-thumb {
+  background: #7357e8;
+  border-radius: 10px;
+}
+
+.channel-videos::-webkit-scrollbar-thumb:hover {
+  background: #886cf5;
+}
+.channel-section > h3 a {
+  color: #eeeef2;
+  text-decoration: none;
+}
+
+.channel-section > h3 a:hover {
+  color: #b6a5ff;
+}
+
+.channel-section > h3 a:focus-visible {
+  outline: 2px solid #b6a5ff;
+  outline-offset: 4px;
+}

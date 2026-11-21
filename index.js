@@ -12,26 +12,54 @@ closeSettingsButton.addEventListener("click", () => {
 
 const apiKeyInput = document.querySelector("#api-key");
 const saveSettingsButton = document.querySelector("#save-settings");
+const subscribedChannelsInput = document.querySelector(
+  "#subscribed-channels"
+);
 
-// Wczytaj wcześniej zapisany klucz.
-chrome.storage.local.get("youtubeApiKey", (result) => {
-  apiKeyInput.value = result.youtubeApiKey || "";
-});
-
-// Zapisz klucz po kliknięciu przycisku.
-saveSettingsButton.addEventListener("click", () => {
-  const apiKey = apiKeyInput.value.trim();
-
-  chrome.storage.local.set({ youtubeApiKey: apiKey }, () => {
+// Wczytaj zapisany klucz i listę kanałów.
+chrome.storage.local.get(
+  ["youtubeApiKey", "subscribedChannels"],
+  (result) => {
     if (chrome.runtime.lastError) {
-      alert("Nie udało się zapisać klucza. Spróbuj ponownie.");
+      alert("Nie udało się wczytać ustawień.");
       return;
     }
 
-    alert("Zapisano klucz API.");
-  });
-});
+    apiKeyInput.value = result.youtubeApiKey || "";
 
+    subscribedChannelsInput.value =
+      (result.subscribedChannels || []).join("\n");
+  }
+);
+
+// Zapisz oba ustawienia jednym przyciskiem.
+saveSettingsButton.addEventListener("click", () => {
+  const apiKey = apiKeyInput.value.trim();
+
+  const channels = subscribedChannelsInput.value
+    .split("\n")
+    .map((channel) => channel.trim())
+    .filter((channel) => channel !== "");
+
+  const uniqueChannels = [...new Set(channels)];
+
+  chrome.storage.local.set(
+    {
+      youtubeApiKey: apiKey,
+      subscribedChannels: uniqueChannels
+    },
+    () => {
+      if (chrome.runtime.lastError) {
+        alert("Nie udało się zapisać ustawień.");
+        return;
+      }
+
+      subscribedChannelsInput.value = uniqueChannels.join("\n");
+
+      alert("Zapisano ustawienia.");
+    }
+  );
+});
 const searchForm = document.querySelector("#search-form");
 const searchQueryInput = document.querySelector("#search-query");
 const searchButton = document.querySelector("#search-button");
@@ -67,7 +95,7 @@ searchForm.addEventListener("submit", async (event) => {
       part: "snippet",
       type: "video",
       q: query,
-      maxResults: "10",
+      maxResults: "30",
       key: apiKey
     }).toString();
 
@@ -87,8 +115,53 @@ searchForm.addEventListener("submit", async (event) => {
       );
     }
 
-    const videos = data.items || [];
+  const foundVideos = data.items || [];
+let videos = foundVideos;
 
+if (foundVideos.length > 0) {
+  const videoIds = foundVideos
+    .map((video) => video.id?.videoId)
+    .filter(Boolean);
+
+  if (videoIds.length > 0) {
+    const detailsUrl = new URL(
+      "https://www.googleapis.com/youtube/v3/videos"
+    );
+
+    detailsUrl.search = new URLSearchParams({
+      part: "contentDetails",
+      id: videoIds.join(","),
+      key: apiKey
+    }).toString();
+
+    const detailsResponse = await fetch(detailsUrl);
+    const detailsData = await detailsResponse.json();
+
+    if (!detailsResponse.ok) {
+      throw new Error(
+        `Nie udało się pobrać długości filmów ` +
+        `(kod ${detailsResponse.status}). Spróbuj ponownie.`
+      );
+    }
+
+    const durations = new Map();
+
+    for (const video of detailsData.items || []) {
+      durations.set(
+        video.id,
+        durationToSeconds(video.contentDetails.duration)
+      );
+    }
+
+    videos = foundVideos.filter((video) => {
+      const seconds = durations.get(video.id?.videoId);
+
+      // Zachowaj film, jeśli długość jest nieznana
+      // albo film trwa więcej niż minutę.
+      return seconds == null || seconds > 60;
+    });
+  }
+}
     for (const video of videos) {
       const videoId = video.id?.videoId;
 
@@ -100,18 +173,44 @@ searchForm.addEventListener("submit", async (event) => {
       const title = document.createElement("h3");
       const link = document.createElement("a");
 
-      link.href =
-        `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      link.textContent = video.snippet.title;
+const playerPage = new URL(
+  chrome.runtime.getURL("player.html")
+);
 
+playerPage.searchParams.set("video", videoId);
+
+link.href = playerPage.toString();
+link.target = "_blank";
+link.rel = "noopener";
+link.textContent = video.snippet.title;
       title.append(link);
 
-      const channel = document.createElement("p");
-      channel.textContent = video.snippet.channelTitle;
+   const channel = document.createElement("p");
+const channelNameLink = document.createElement("a");
 
-      card.append(title, channel);
+const channelAddress = new URL(
+  chrome.runtime.getURL("channel.html")
+);
+
+channelAddress.searchParams.set(
+  "channel",
+  video.snippet.channelId
+);
+
+channelNameLink.href = channelAddress.toString();
+channelNameLink.target = "_blank";
+channelNameLink.rel = "noopener";
+channelNameLink.textContent = video.snippet.channelTitle;
+
+channel.append(channelNameLink);
+
+    const thumbnail = document.createElement("img");
+
+thumbnail.src = video.snippet.thumbnails.medium.url;
+thumbnail.alt = "";
+thumbnail.loading = "lazy";
+
+card.append(thumbnail, title, channel);
       searchResults.append(card);
     }
 
@@ -126,3 +225,16 @@ searchForm.addEventListener("submit", async (event) => {
     searchButton.disabled = false;
   }
 });
+function durationToSeconds(duration) {
+  const match = duration.match(
+    /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?$/
+  );
+
+  if (!match) return null;
+
+  const hours = Number(match[1] || 0);
+  const minutes = Number(match[2] || 0);
+  const seconds = Number(match[3] || 0);
+
+  return hours * 3600 + minutes * 60 + seconds;
+}

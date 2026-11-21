@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Filmy kanału</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="channel.css">
+</head>
+
+<body>
+  <header>
+    <h1 id="channel-title">Filmy kanału</h1>
+  </header>
+
+  <main>
+    <section class="panel">
+      <label for="channel-filter">
+        Filtruj wczytane filmy po tytule
+      </label>
+
+      <input
+        id="channel-filter"
+        type="search"
+        placeholder="Wpisz fragment tytułu"
+        autocomplete="off"
+      >
+
+      <p id="channel-status" role="status">
+        Przygotowywanie listy filmów…
+      </p>
+
+      <button id="load-all-videos" type="button" disabled>
+        Wczytaj wszystkie filmy
+      </button>
+
+      <div id="channel-results"></div>
+    </section>
+  </main>
+
+  <script src="channel.js"></script>
+</body>
+</html>

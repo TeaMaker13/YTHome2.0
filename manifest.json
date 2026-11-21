@@ -2,8 +2,14 @@
   "manifest_version": 3,
   "name": "Mój YouTube",
   "version": "0.1.0",
-  "permissions": ["storage"],
-  "host_permissions": ["https://www.googleapis.com/*"],
+"permissions": [
+  "storage",
+  "declarativeNetRequestWithHostAccess"
+],
+"host_permissions": [
+  "https://www.googleapis.com/*",
+  "https://www.youtube.com/*"
+],
   "description": "TeaMaker here",
   "action": {
     "default_title": "He he"
